@@ -21,17 +21,19 @@ class MyDatastoreServicer(datastore_pb2.DatastoreServicer):
     def put(self, request, context):
         print("put")
         key = uuid.uuid4().hex
+
+        # converting key and value string to utf-8 bytes 
         bkey = key.encode(encoding='UTF-8',errors='strict')
         value = (request.data).encode(encoding='UTF-8',errors='strict')
+        # storing key and value as bytes in rocksDB
         self.db.put(bkey, value)
-        
-        # TODO - save key and value into DB converting request.data string to utf-8 bytes 
         
         return datastore_pb2.Response(data=key)
 
     def get(self, request, context):
         print("get")
-        # TODO - retrieve the value from DB by the given key. Needs to convert request.data string to utf-8 bytes. 
+        
+        # retrieving the value from DB by the given key 
         key = (request.data).encode(encoding='UTF-8',errors='strict')
         value = self.db.get(key)
 
